@@ -1,12 +1,17 @@
 package com.batista.json.main
 
+import kotlin.reflect.full.memberProperties
+import com.batista.json.anotation.JsonExclude
+import com.batista.json.anotation.JsonProperty
+import com.batista.json.anotation.jsonForceString
+import com.batista.json.model.*
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.memberProperties
 fun main(){
-    val listProperty = ArrayList<String>()
-    listProperty.addAll(listOf("numero", "nome"))
-    var teste = listProperty.joinToString()
-    print((listProperty))
 
-    var num:String = "22.0"
-    var teste2:Int = num.toInt()
-    print(num.toInt() is Int)
+
+    var kClass = JsonObject::class
+    val properties = kClass.memberProperties
+    print(properties.toMutableList())
 }

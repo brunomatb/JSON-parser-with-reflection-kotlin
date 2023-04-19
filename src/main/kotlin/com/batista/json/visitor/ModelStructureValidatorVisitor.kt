@@ -4,7 +4,7 @@ import com.batista.json.model.*
 
 class ModelStructureValidatorVisitor:JsonValueVisiter {
     var modelIsValid:Boolean =  true
-
+    var numberIntsIsValid:Boolean = true
     override fun visit(numberValue: JsonNumber) {
 
     }
@@ -12,8 +12,11 @@ class ModelStructureValidatorVisitor:JsonValueVisiter {
     override fun visit(obj: JsonObject) {
        obj.properties.forEach{ (k,v) ->
            when(k){
-               "numero" -> (if (v is JsonNumber && v.value !is Int) modelIsValid = false)
-               "inscritos" -> if(v is JsonArray){
+               JsonString("numero") -> (if (v is JsonNumber && v.value !is Int){
+                   modelIsValid = false
+                   numberIntsIsValid = false
+               })
+               JsonString("inscritos") -> if(v is JsonArray){
                    val objEstrutura = v.values.firstOrNull() as? JsonObject
                    v.values.forEach { elem -> if(elem!is JsonObject || elem.properties.keys != objEstrutura?.properties!!.keys){
                        modelIsValid = false

@@ -3,17 +3,17 @@ package com.batista.json.visitor
 import com.batista.json.model.*
 
 data class JsonObjTwoPropVisitor(val prop1:String, val prop2:String): JsonValueVisiter {
-    val listProperty = ArrayList<String>()
+    val listProperty = ArrayList<JsonObject>()
 
     override fun visit(numberValue: JsonNumber) {
 
     }
     override fun visit(obj: JsonObject) {
-            if (obj.properties.contains(prop1) && obj.properties.contains(prop2)) {
-                if (listProperty.contains(obj.toJsonString())) {
+            if (obj.properties.contains(JsonString(prop1)) && obj.properties.contains(JsonString(prop2))) {
+                if (listProperty.contains(obj)) {
 
                 }else{
-                    listProperty.add(obj.toJsonString())
+                    listProperty.add(obj)
                 }
         }
             obj.properties.entries.forEach { (k, v) ->
