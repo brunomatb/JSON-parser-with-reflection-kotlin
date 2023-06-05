@@ -2,7 +2,9 @@ package com.batista.json.visitor
 
 import com.batista.json.models.*
 
-
+/**
+ * Interface para visitantes de valores JSON.
+ */
 sealed interface JsonVisiter{
     fun visit(value: JsonObject)
     fun visit(value: JsonArray)

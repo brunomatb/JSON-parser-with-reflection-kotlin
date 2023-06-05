@@ -1,7 +1,9 @@
 package com.batista.json.visitor
 
 import com.batista.json.models.*
-
+/**
+ * Visitante para operações em valores JSON do tipo número.
+ */
 class JsonNumberVisitor: JsonVisiter {
     val listNumbers = ArrayList<JsonNumber>()
     override fun visit(numberValue: JsonNumber) {

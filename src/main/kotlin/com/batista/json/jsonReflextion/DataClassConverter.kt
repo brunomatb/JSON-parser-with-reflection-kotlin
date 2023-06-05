@@ -1,31 +1,30 @@
 package com.batista.json.jsonReflextion
 
-import com.batista.json.models.JsonNull
-import com.batista.json.models.JsonObject
-import com.batista.json.models.JsonString
-import com.batista.json.models.JsonValue
+import com.batista.json.anotations.JsonExclude
+import com.batista.json.anotations.JsonProperty
+import com.batista.json.models.*
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
-class DataClassConverter: JsonValueConverter {
+class DataClassConverter {
 
-    fun toJsonValue(obj:Any?): JsonValue {
-        val converter: JsonValueConverter
-        converter = when(obj){
-            null -> JsonNullConverter()
-            is Number -> JsonNumberConverter()
-            is String -> JsonStringConverter()
-            is Boolean -> JsonBooleanConverter()
-            is Collection<*> -> JsonArrayConverter()
-            is Map<*,*> -> JsonMapConverter()
-            else->{
-                DataClassConverter()
+
+    fun toJsonValue(obj: Any?): JsonValue {
+        return when (obj) {
+            null -> JsonNull()
+            is Number -> JsonNumber(obj)
+            is String -> JsonString(obj)
+            is Boolean -> JsonBoolean(obj)
+            is Enum<*> -> JsonString(obj.name)
+            is Collection<*> -> JsonArray(obj.map { toJsonValue(it) }.toMutableList())
+            is MutableMap<*, *> -> JsonObject(obj.mapKeys { it.key.toString() }.mapValues { toJsonValue(it.value) }.toMutableMap())
+            else -> {
+                convertObjectValue(obj)
             }
         }
-        return converter.convertObjectValue(obj)
     }
-    override fun convertObjectValue(obj: Any?): JsonValue {
+    fun convertObjectValue(obj: Any?): JsonValue {
         if(obj == null) {
             return JsonNull()
         }
@@ -37,7 +36,7 @@ class DataClassConverter: JsonValueConverter {
                     val key = getTreatJsonProperty(p)
                     val value = getTreatJsonForceString(p, obj)
                     key to value
-            }.toMap()
+            }.toMap() as MutableMap
             return JsonObject(props)
         }else{
             throw IllegalArgumentException("Tipo não suportado")

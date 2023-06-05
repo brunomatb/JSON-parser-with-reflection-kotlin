@@ -2,7 +2,11 @@ package com.batista.json.models
 
 import com.batista.json.visitor.JsonVisiter
 
-
+/**
+ * Representa um valor JSON do tipo booleano.
+ *
+ * @param bolValue valor booleano.
+ */
 class JsonBoolean(val bolValue:Boolean): JsonValue {
     override fun toJsonString(): String {
         return bolValue.toString()

@@ -1,10 +1,21 @@
-fun main(){
-    val map = mapOf(
-        "a" to 1,
-        "b" to 2,
-        "c" to 3
-    )
-    val list = listOf("a", "b", "c")
-    val map2 = list.map { it to it.toUpperCase() }.toMap()
-    print(map2)
+
+import java.io.File
+import kotlin.jvm.internal.Reflection
+import kotlin.reflect.KClass
+import org.reflections.Reflections
+
+fun main() {
+    val packageName = "com.batista.json.jsonReflextion"
+    val reflections = Reflections(packageName)
+    val classes = reflections.getSubTypesOf(Any::class.java)
+
+    println("Classes no pacote '$packageName':")
+    for (clazz in classes) {
+        println(clazz.name)
+    }
 }
+
+
+
+
+
