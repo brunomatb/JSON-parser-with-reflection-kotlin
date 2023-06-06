@@ -6,9 +6,9 @@ Esta é uma biblioteca Programada em Kotlin que permite a conversão de objetos 
 - Manipulação de estruturas de dados JSON.
 - Suporte para anotações personalizadas para o comportamento da conversão.
 # Classes Principais
-- `com.batista.json.jsonReflextion.Reflection`: Classe responsável por converter objetos em valores JSON usando reflexão.
-- `com.batista.json.jsonValues.JsonObject`: Representa um valor JSON do tipo objeto.
-- `com.batista.json.jsonValues.JsonString`: Representa um valor JSON do tipo string.
+- `com.batista.json.jsonReflextion.Reflection`: Classe responsável por converter objetos em JSON usando reflexão.
+- `com.batista.json.jsonValues.JsonObject`: Representa um JSON do tipo objeto.
+- `com.batista.json.jsonValues.JsonString`: Representa um JSON do tipo string.
 
 ## Instalação
 
