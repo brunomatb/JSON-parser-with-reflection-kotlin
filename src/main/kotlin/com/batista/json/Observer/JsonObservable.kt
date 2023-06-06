@@ -4,7 +4,7 @@ package com.batista.json.Observer
  */
 interface JsonObservable  {
     fun addObserver(observer: JsonObserver)
-    fun removeObserver(observer:JsonObserver)
+    fun removeObserver(observer: JsonObserver)
     fun notifyObservers()
 
 }

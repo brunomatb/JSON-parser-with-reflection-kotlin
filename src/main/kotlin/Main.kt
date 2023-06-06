@@ -1,11 +1,8 @@
-import com.batista.json.jsonReflextion.DataClassConverter
-
-
 import clientModel.Cliente
-import com.batista.json.models.JsonArray
-import com.batista.json.models.JsonNumber
-import com.batista.json.models.JsonObject
-import com.batista.json.models.JsonString
+import com.batista.json.jsonValues.JsonArray
+import com.batista.json.jsonValues.JsonNumber
+import com.batista.json.jsonValues.JsonObject
+import com.batista.json.jsonValues.JsonString
 import com.batista.json.visitor.ModelStructureValidatorVisitor
 
 fun main(){
@@ -17,7 +14,7 @@ fun main(){
     teste.visit(obj)
     print(teste.modelIsValid)
     val cliente = Cliente("bruno", 35, 170.80, listOf(933323, 2235865))
-    val jsonConverter = com.batista.json.jsonReflextion.DataClassConverter()
+    val jsonConverter = com.batista.json.jsonReflextion.Reflection()
     jsonConverter.toJsonValue(cliente)
 
 }

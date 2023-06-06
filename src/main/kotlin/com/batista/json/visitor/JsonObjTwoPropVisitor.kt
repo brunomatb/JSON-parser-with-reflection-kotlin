@@ -1,42 +1,51 @@
 package com.batista.json.visitor
 
-import com.batista.json.models.*
+import com.batista.json.jsonValues.*
 
+/**
+ * Visitante para objetos JSON para duas propriedades específicas.
+ */
+class JsonObjTwoPropVisitor(): JsonVisiter {
+    val listProperty = ArrayList<String>()
 
-data class JsonObjTwoPropVisitor(val prop1:String, val prop2:String): JsonVisiter {
-    val listProperty = ArrayList<JsonObject>()
-
-    override fun visit(numberValue: JsonNumber) {
+    override fun visit(value: JsonNumber) {
 
     }
-    override fun visit(obj: JsonObject) {
-            if (obj.objMap.contains(prop1) && obj.objMap.contains(prop2)) {
-                if (listProperty.contains(obj)) {
+    /**
+     * Visita um objeto JSON.
+     * Verifica se o objeto contém as duas propriedades especificadas (prop1 e prop2).
+     * Se o objeto já estiver na lista listProperty, não faz nada.
+     * Caso contrário, adiciona o objeto à lista.
+     * Em seguida, continua a visitar os restantes valores do objeto JSON.
+     *
+     * @param obj o objeto JSON a ser visitado.
+     */
+    override fun visit(value: JsonObject) {
+            if (value.objMap.contains("numero") && value.objMap.contains("nome")) {
 
-                }else{
-                    listProperty.add(obj)
-                }
+                    listProperty.add(value.toJsonString())
+
         }
-            obj.objMap.entries.forEach { (k, v) ->
+               value.objMap.entries.forEach { (k, v) ->
 
                 v.accept(this)
             }
 
     }
 
-    override fun visit(bolValue: JsonBoolean) {
+    override fun visit(value: JsonBoolean) {
 
     }
 
-    override fun visit(nullValue: JsonNull) {
+    override fun visit(value: JsonNull) {
 
     }
 
-    override fun visit(arrayValues: JsonArray) {
-        arrayValues.values.forEach { it.accept(this)}
+    override fun visit(value: JsonArray) {
+        value.values.forEach { it.accept(this)}
     }
 
-    override fun visit(stringValue: JsonString) {
+    override fun visit(value: JsonString) {
 
     }
 }

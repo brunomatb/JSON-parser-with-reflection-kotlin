@@ -1,6 +1,6 @@
 package com.batista.json.visitor
 
-import com.batista.json.models.*
+import com.batista.json.jsonValues.*
 
 /**
  * Interface para visitantes de valores JSON.

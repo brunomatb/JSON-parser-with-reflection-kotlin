@@ -1,6 +1,6 @@
 package com.batista.json.Command
 
-import com.batista.json.models.JsonString
+import com.batista.json.jsonValues.JsonString
 
 class UpdateJsonString(private val jsonString: JsonString, private val newValue: String) : JsonCommand{
     private var previousValue: String = ""

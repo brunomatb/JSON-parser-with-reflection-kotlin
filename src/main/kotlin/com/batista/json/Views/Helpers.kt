@@ -69,9 +69,20 @@ class Editor {
                             revalidate()
                             frame.repaint()
                         }
+                        val delProp = JButton("delete prop")
+                        delProp.addActionListener {
+                            val panel = this@apply.parent as JPanel // Obtém o painel pai do componente atual
+                            val componentToRemove = panel.getComponent(1) // Obtém o segundo componente do painel (índice 1)
+                            panel.remove(componentToRemove) // Remove o componente do painel
+                            panel.revalidate() // Revalida o layout do painel
+                            frame.repaint() // Atualiza a exibição do frame
+                            menu.isVisible = false // Esconde o menu pop-up
+                        }
+
+                        menu.add(delProp)
                         menu.add(add);
                         menu.add(del)
-                        menu.show(this@apply, 100, 100);
+                        menu.show(this@apply, 50, 50);
                     }
                 }
             })

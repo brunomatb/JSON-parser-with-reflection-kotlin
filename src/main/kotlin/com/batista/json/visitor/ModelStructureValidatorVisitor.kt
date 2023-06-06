@@ -1,16 +1,16 @@
 package com.batista.json.visitor
 
-import com.batista.json.models.*
+import com.batista.json.jsonValues.*
 
 class ModelStructureValidatorVisitor:JsonVisiter {
     var modelIsValid:Boolean =  true
     var numberIntsIsValid:Boolean = true
-    override fun visit(numberValue: JsonNumber) {
+    override fun visit(value: JsonNumber) {
 
     }
 
-    override fun visit(obj: JsonObject) {
-       obj.objMap.forEach{ (k,v) ->
+    override fun visit(value: JsonObject) {
+        value.objMap.forEach{ (k,v) ->
            when(k){
                "numero" -> (if (v is JsonNumber && v.value !is Int){
                    modelIsValid = false
@@ -28,19 +28,19 @@ class ModelStructureValidatorVisitor:JsonVisiter {
        }
     }
 
-    override fun visit(bolValue: JsonBoolean) {
+    override fun visit(value: JsonBoolean) {
 
     }
 
-    override fun visit(nullValue: JsonNull) {
+    override fun visit(value: JsonNull) {
 
     }
 
-    override fun visit(arrayValues: JsonArray) {
-        arrayValues.values.forEach { it.accept(this)}
+    override fun visit(value: JsonArray) {
+        value.values.forEach { it.accept(this)}
     }
 
-    override fun visit(stringValue: JsonString) {
+    override fun visit(value: JsonString) {
 
     }
 }
