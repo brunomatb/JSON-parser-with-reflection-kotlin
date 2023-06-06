@@ -98,7 +98,7 @@ import com.batista.json.Observer.JsonObserver
 
 class MyObserver : JsonObserver {
     override fun onJsonChanged() {
-        println("Alteração detectada no valor JSON.")
+        println("Alteração detectada no valor do JSON.")
     }
 }
 
