@@ -62,9 +62,10 @@ Exemplo de como usar um visitor para imprimir os  JSON:
 import com.batista.json.visitor.JsonPrinter
 
 fun main() {
-    val jsonValue: JsonValue = val printer = JsonPrinter()
-    jsonValue.accept(printer)
-    val jsonString: String = printer.getJsonString()
+    val jsonValue: JsonValue = 
+    val jsonExemple = JsonExemple()
+    jsonValue.accept(jsonExemple)
+    val jsonString: String = jsonExemple.getJsonString()
     println(jsonString)
 }
 ```
