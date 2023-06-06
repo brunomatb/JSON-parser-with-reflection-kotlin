@@ -107,7 +107,7 @@ fun main() {
     val observer = MyObserver()
     jsonValue.addObserver(observer)
 
-    // Faça alterações no valor JSON
+    // Efetuatr alterações no valor do JSON
 
     // O observador será notificado
 }
