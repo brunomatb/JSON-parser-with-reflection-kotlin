@@ -1,6 +1,6 @@
 
 # Biblioteca JSON em Kotlin
-Esta é uma biblioteca Programada em Kotlin que permite a conversão de objetos em um JSON e manipulação de propriedades, visitantes, reflexão/anotações e observadores. Ela foi projetada para facilitar o trabalho com um JSON em Kotlin.
+Esta é uma biblioteca Programada em Kotlin que permite a conversão de objetos em um JSON e manipulação de propriedades, visitantes, reflexão/anotações e observadores. Foi projetada para facilitar o uso com um JSON em Kotlin.
 # Recursos Principais:
 - Conversão de objetos em JSON usando a reflexão.
 - Manipulação de estruturas de dados JSON.
