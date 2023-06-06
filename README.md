@@ -75,9 +75,11 @@ Exemplo de uso de anotações para definir nomes de propriedades personalizados:
 ```
 import com.batista.json.anotations.JsonProperty
 
-data class Person(
-    @JsonProperty("name") val nome: String,
-    @JsonProperty("age") val idade: Int
+data class Student(
+    @JsonProperty("name") 
+    val nome: String,
+    @JsonProperty("age") 
+    val idade: Int
 )
 
 fun main() {
