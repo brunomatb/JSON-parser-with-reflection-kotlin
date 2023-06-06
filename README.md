@@ -59,7 +59,7 @@ fun main() {
 # Utilização do visitors
 Exemplo de como usar um visitor para imprimir os  JSON:
 ```
-import com.batista.json.visitor.JsonPrinter
+import com.batista.json.visitor.JsonExemple
 
 fun main() {
     val jsonValue: JsonValue = 
