@@ -10,7 +10,7 @@ import com.batista.json.visitor.JsonVisiter
  * @param objMap valor de um Mapa mutavél.
  */
 class JsonObject(val objMap: MutableMap<String, JsonValue>): JsonValue, JsonObservable {
-    private val observers: MutableList<JsonObserver> = mutableListOf()
+     val observers: MutableList<JsonObserver> = mutableListOf()
     override fun toJsonString(): String {
         return """{${objMap.entries.joinToString() { """"${it.key}":${it.value.toJsonString()}""" }}}"""
     }
@@ -30,18 +30,6 @@ class JsonObject(val objMap: MutableMap<String, JsonValue>): JsonValue, JsonObse
     override fun notifyObservers() {
         for (observer in observers) {
             observer.onJsonChanged()
-        }
-    }
-    fun addProperty(name: String, value: JsonValue) {
-        objMap[name] = value
-        notifyObservers()
-    }
-
-    fun removeLastProperty() {
-        if (objMap.isNotEmpty()) {
-            val lastKey = objMap.keys.last()
-            objMap.remove(lastKey)
-            notifyObservers()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.batista.json.jsonValues
 import Models.Exam
 import Models.Student
+import com.batista.json.Observer.JsonObserver
 import com.batista.json.jsonReflextion.Reflection
 import com.batista.json.visitor.JsonNumberVisitor
 import com.batista.json.visitor.JsonObjTwoPropVisitor
@@ -31,6 +32,70 @@ internal class JsonTests{
             ))
         ))
     ))
+    @Test
+    fun `test to JsonObject as JsonString`() {
+
+        val expectedObjetos = """{"uc":"PA", "ects":6.0, "data-exame":null, "inscritos":[{"numero":101101, "nome":"Dave Farley", "internacional":true}, {"numero":101102, "nome":"Martin Fowler", "internacional":true}, {"numero":26503, "nome":"André Santos", "internacional":false}]}"""
+        assertEquals(expectedObjetos, jsonObject.toJsonString())
+    }
+
+    private class TestJsonObserver : JsonObserver {
+        var updatedValue: String? = null
+
+        override fun onJsonChanged() {
+            updatedValue = "Valor foi atualizado"
+        }
+    }
+    @Test
+    fun testJsonObserver() {
+        val observer = TestJsonObserver()
+        jsonObject.addObserver(observer)
+
+        // Atualiza o valor de uma propriedade do JsonObject
+        jsonObject.objMap["uc"] = JsonString("MPD")
+        jsonObject.notifyObservers()
+        assertEquals("Valor foi atualizado", observer.updatedValue)
+        // remove o observador
+        jsonObject.removeObserver(observer)
+        // adiciona o observador
+        jsonObject.addObserver(observer)
+        assertEquals(JsonString("MPD"), jsonObject.objMap["uc"])
+        // Adiciona um novo valor ao JsonArray
+        (jsonObject.objMap["inscritos"] as JsonArray).values.add(
+            JsonObject(mutableMapOf(
+                "numero" to JsonNumber(303303),
+                "nome" to JsonString("Pedro")
+            ))
+        )
+        jsonObject.notifyObservers()
+        assertEquals("Valor foi atualizado", observer.updatedValue)
+        jsonObject.notifyObservers()
+        // Remove um valor do JsonArray
+        (jsonObject.objMap["inscritos"] as JsonArray).values.removeAt(0)
+        assertEquals("Valor foi atualizado", observer.updatedValue)
+    }
+    @Test
+    fun textAddObserver(){
+        val observer = TestJsonObserver()
+        jsonObject.addObserver(observer)
+
+        // Atualiza o valor de uma propriedade do JsonObject
+        jsonObject.objMap["uc"] = JsonString("MPD")
+
+        assertEquals(1, jsonObject.observers.size)
+    }
+    @Test
+    fun textRemoveObserver(){
+        val observer = TestJsonObserver()
+        jsonObject.addObserver(observer)
+
+        // Atualiza o valor de uma propriedade do JsonObject
+        jsonObject.objMap["uc"] = JsonString("MPD")
+        jsonObject.notifyObservers()
+        jsonObject.removeObserver(observer)
+        assertEquals(0, jsonObject.observers.size)
+    }
+
 
     @Test
     fun `test to NumberVisitor`() {
@@ -52,16 +117,10 @@ internal class JsonTests{
     fun `test to ModelStructureValidatorVisitor`() {
         val estruturaValidacaoVisitor = ModelStructureValidatorVisitor()
         jsonObject.accept(estruturaValidacaoVisitor)
-
         assertTrue(estruturaValidacaoVisitor.numberIntsIsValid)
         assertTrue(estruturaValidacaoVisitor.modelIsValid)
     }
-    @Test
-    fun `test to JsonObject as JsonString`() {
 
-        val expectedObjetos = """{"uc":"PA", "ects":6.0, "data-exame":null, "inscritos":[{"numero":101101, "nome":"Dave Farley", "internacional":true}, {"numero":101102, "nome":"Martin Fowler", "internacional":true}, {"numero":26503, "nome":"André Santos", "internacional":false}]}"""
-        assertEquals(expectedObjetos, jsonObject.toJsonString())
-    }
     @Test
     fun testeToJsonNumber(){
         val jsonNumber = JsonNumber(12)
