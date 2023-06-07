@@ -93,14 +93,13 @@ fun main() {
 # Uso de Observadores
 Exemplo de como usar observadores
 ```
-import com.batista.json.Observer.JsonObservable
-import com.batista.json.Observer.JsonObserver
+    private class TestJsonObserver : JsonObserver {
+        var updatedValue: String? = null
 
-class MyObserver : JsonObserver {
-    override fun onJsonChanged() {
-        println("Alteração detectada no valor do JSON.")
+        override fun onJsonChanged() {
+            updatedValue = "Valor foi atualizado"
+        }
     }
-}
 
 fun main() {
     val jsonValue: JsonValue = // Valor JSON a ser observado
@@ -111,6 +110,34 @@ fun main() {
 
     // O observador será notificado
 }
+  @Test
+    fun testJsonObserver() {
+        val observer = TestJsonObserver()
+        jsonObject.addObserver(observer)
+
+        // Atualiza o valor de uma propriedade do JsonObject
+        jsonObject.objMap["uc"] = JsonString("MPD")
+        jsonObject.notifyObservers()
+        assertEquals("Valor foi atualizado", observer.updatedValue)
+        // remove o observador
+        jsonObject.removeObserver(observer)
+        // adiciona o observador
+        jsonObject.addObserver(observer)
+        assertEquals(JsonString("MPD"), jsonObject.objMap["uc"])
+        // Adiciona um novo valor ao JsonArray
+        (jsonObject.objMap["inscritos"] as JsonArray).values.add(
+            JsonObject(mutableMapOf(
+                "numero" to JsonNumber(303303),
+                "nome" to JsonString("Pedro")
+            ))
+        )
+        jsonObject.notifyObservers()
+        assertEquals("Valor foi atualizado", observer.updatedValue)
+        jsonObject.notifyObservers()
+        // Remove um valor do JsonArray
+        (jsonObject.objMap["inscritos"] as JsonArray).values.removeAt(0)
+        assertEquals("Valor foi atualizado", observer.updatedValue)
+    }
 
 ```
 
