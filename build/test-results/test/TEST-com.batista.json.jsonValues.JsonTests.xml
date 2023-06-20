@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.batista.json.jsonValues.JsonTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-07T18:09:03" hostname="LAPTOP-EU27B3I5" time="0.033">
+<testsuite name="com.batista.json.jsonValues.JsonTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-20T21:29:48" hostname="LAPTOP-EU27B3I5" time="0.071">
   <properties/>
-  <testcase name="textRemoveObserver()" classname="com.batista.json.jsonValues.JsonTests" time="0.033"/>
-  <system-out><![CDATA[]]></system-out>
+  <testcase name="test to JsonObject as JsonString()" classname="com.batista.json.jsonValues.JsonTests" time="0.071"/>
+  <system-out><![CDATA[{
+    "uc": "PA",
+    "ects": 6.0,
+    "data-exame": null,
+    "inscritos": [
+    {
+    "numero": 101101,
+    "nome": "Dave Farley",
+    "internacional": true
+  },
+    {
+    "numero": 101102,
+    "nome": "Martin Fowler",
+    "internacional": true
+  },
+    {
+    "numero": 26503,
+    "nome": "André Santos",
+    "internacional": false
+  }
+  ]
+  }
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -23,7 +23,6 @@ class JsonNumberVisitor: JsonVisiter {
             if (k == "numero"  && v is JsonNumber) {
                 listNumbers.add(v.value.toString())
             }
-            v.accept(this)
         }
     }
 
@@ -34,20 +33,10 @@ class JsonNumberVisitor: JsonVisiter {
     override fun visit(value: JsonNull) {
 
     }
-    /**
-     * Visita um valor JSON do tipo array.
-     * Continua a visitar cada valor presente no array.
-     *
-     * @param arrayValues o valor JSON do tipo array a ser visitado.
-     */
-    override fun visit(value: JsonArray) {
-        value.values.forEach { it.accept(this)}
 
+    override fun visit(value: JsonArray) {
     }
 
     override fun visit(value: JsonString) {
-
     }
-
-
 }

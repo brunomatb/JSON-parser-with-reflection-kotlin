@@ -19,7 +19,7 @@ internal class JsonTests{
             JsonObject(mutableMapOf(
                 "numero" to JsonNumber(101101),
                 "nome" to JsonString("Dave Farley"),
-                "internacional" to JsonBoolean(true)
+                "internacional" to JsonBoolean(true),
             )),
             JsonObject(mutableMapOf(
                 "numero" to JsonNumber(101102),
@@ -32,10 +32,33 @@ internal class JsonTests{
             ))
         ))
     ))
+
     @Test
     fun `test to JsonObject as JsonString`() {
 
-        val expectedObjetos = """{"uc":"PA", "ects":6.0, "data-exame":null, "inscritos":[{"numero":101101, "nome":"Dave Farley", "internacional":true}, {"numero":101102, "nome":"Martin Fowler", "internacional":true}, {"numero":26503, "nome":"André Santos", "internacional":false}]}"""
+        val expectedObjetos =
+            """{
+    "uc": "PA",
+    "ects": 6.0,
+    "data-exame": null,
+    "inscritos": [
+    {
+    "numero": 101101,
+    "nome": "Dave Farley",
+    "internacional": true
+  },
+    {
+    "numero": 101102,
+    "nome": "Martin Fowler",
+    "internacional": true
+  },
+    {
+    "numero": 26503,
+    "nome": "André Santos",
+    "internacional": false
+  }
+  ]
+  }"""
         assertEquals(expectedObjetos, jsonObject.toJsonString())
     }
 
@@ -109,7 +132,20 @@ internal class JsonTests{
     fun `test to JsonObjTwoPropVisitor`() {
         val jsonObjTwoPropVisitor = JsonObjTwoPropVisitor()
         jsonObject.accept(jsonObjTwoPropVisitor)
-        val expectedObjetos = """[{"numero":101101, "nome":"Dave Farley", "internacional":true}, {"numero":101102, "nome":"Martin Fowler", "internacional":true}, {"numero":26503, "nome":"André Santos", "internacional":false}]"""
+        val expectedObjetos =
+            """[{
+    "numero": 101101,
+    "nome": "Dave Farley",
+    "internacional": true
+  }, {
+    "numero": 101102,
+    "nome": "Martin Fowler",
+    "internacional": true
+  }, {
+    "numero": 26503,
+    "nome": "André Santos",
+    "internacional": false
+  }]"""
         assertEquals(expectedObjetos, jsonObjTwoPropVisitor.listProperty.toString())
     }
 
@@ -157,10 +193,29 @@ internal class JsonTests{
         )
         val exam = Exam("PA", 6.0, null, students)
         val jsonReflection = Reflection()
-        val valorEsperado = """{"Curso":"PA", "student":[{"international":true, "name":"Dave Farley", "number":101101}, {"international":true, "name":"Martin Fowler", "number":101102}, {"international":false, "name":"André Santos", "number":26503}]}"""
+        val valorEsperado =
+            """{
+    "Curso": "PA",
+    "student": [
+    {
+    "international": true,
+    "name": "Dave Farley",
+    "number": 101101
+  },
+    {
+    "international": true,
+    "name": "Martin Fowler",
+    "number": 101102
+  },
+    {
+    "international": false,
+    "name": "André Santos",
+    "number": 26503
+  }
+  ]
+  }"""
         assertEquals(valorEsperado, jsonReflection.toJsonValue(exam).toJsonString())
     }
-
 
 
 }

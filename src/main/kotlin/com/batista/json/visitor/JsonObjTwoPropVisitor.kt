@@ -22,15 +22,8 @@ class JsonObjTwoPropVisitor(): JsonVisiter {
      */
     override fun visit(value: JsonObject) {
             if (value.objMap.contains("numero") && value.objMap.contains("nome")) {
-
-                    listProperty.add(value.toJsonString())
-
+                listProperty.add(value.toJsonString())
         }
-               value.objMap.entries.forEach { (k, v) ->
-
-                v.accept(this)
-            }
-
     }
 
     override fun visit(value: JsonBoolean) {
@@ -42,7 +35,6 @@ class JsonObjTwoPropVisitor(): JsonVisiter {
     }
 
     override fun visit(value: JsonArray) {
-        value.values.forEach { it.accept(this)}
     }
 
     override fun visit(value: JsonString) {

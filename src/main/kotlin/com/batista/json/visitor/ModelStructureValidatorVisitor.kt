@@ -24,7 +24,6 @@ class ModelStructureValidatorVisitor:JsonVisiter {
                    }
                }
            }
-           v.accept(this)
        }
     }
 

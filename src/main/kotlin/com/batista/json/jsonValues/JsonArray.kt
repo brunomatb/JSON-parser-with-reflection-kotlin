@@ -15,11 +15,37 @@ data class JsonArray(var values:MutableList<JsonValue>): JsonValue, JsonObservab
     private val observers: MutableList<JsonObserver> = mutableListOf()
 
     override fun toJsonString(): String {
-        return values.joinToString(prefix = "[", postfix = "]"){it.toJsonString()}
-    }
+        val indentSize = 4
+        val indentChar = ' '
 
+        var jsonString = "[\n"
+
+        var isFirst = true
+        for (value in values) {
+            if (!isFirst) {
+                jsonString += ",\n"
+            }
+            jsonString += indentChar.toString().repeat(indentSize)
+            jsonString += value.toJsonString()
+
+            isFirst = false
+        }
+
+        jsonString += "\n"
+        jsonString += indentChar.toString().repeat(indentSize - 2)
+        jsonString += "]"
+
+        return jsonString
+    }
+    /**
+     * Visita um valor JSON do tipo array.
+     * Continua a visitar cada valor presente no array.
+     *
+     * @param arrayValues o valor JSON do tipo array a ser visitado.
+     */
     override fun accept(visitor: JsonVisiter) {
         visitor.visit(this)
+        values.forEach { it.accept(visitor)}
     }
 
     override fun addObserver(observer: JsonObserver) {
