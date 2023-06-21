@@ -27,7 +27,7 @@ class ViewEditor {
         val right = JPanel()
         right.layout = GridLayout()
         val srcArea = JTextArea()
-        srcArea.tabSize = 2
+        srcArea.tabSize = 1
         right.add(srcArea)
         add(right)
 
@@ -55,6 +55,66 @@ class ViewEditor {
                 updatePreview()
             }
         }
+        fun createWidgetArray(key: String, values: MutableList<String>): JPanel {
+            val panel = JPanel()
+            panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
+            panel.alignmentX = Component.LEFT_ALIGNMENT
+            panel.alignmentY = Component.TOP_ALIGNMENT
+
+            panel.add(JLabel(key))
+
+            val jArray = JsonArray(values.map { JsonString(it) }.toMutableList())
+
+            for (value in values) {
+                val text = JTextField(value)
+                text.addFocusListener(object : FocusAdapter() {
+                    override fun focusLost(e: FocusEvent) {
+                        jArray.values.clear()
+                        for (textField in panel.components.filterIsInstance<JTextField>()) {
+                            jArray.values.add(JsonString(textField.text))
+                        }
+                        if (firstObject.containsKey(key)) {
+                            firstObject[key] = jArray.toJsonString()
+                            updatePreview()
+                        }
+                    }
+                })
+
+                // Adicionar o menu de contexto ao JTextField
+                val popupMenu = JPopupMenu()
+                val removeItem = JMenuItem("Remover")
+                val addItem = JMenuItem("Adicionar")
+
+                removeItem.addActionListener {
+                    panel.remove(text)
+                    panel.revalidate()
+                    panel.repaint()
+                }
+
+                addItem.addActionListener {
+                    val textField = JTextField()
+                    panel.add(textField, panel.componentCount - 1) // Adicionar antes do botão "Remove"
+                    panel.revalidate()
+                    panel.repaint()
+                }
+
+                popupMenu.add(removeItem)
+                popupMenu.add(addItem)
+
+                text.componentPopupMenu = popupMenu
+
+                panel.add(text)
+            }
+
+            val removeButton = JButton("Remove")
+            removeButton.addActionListener {
+                removeLastWidget()
+            }
+            panel.add(removeButton)
+
+            return panel
+        }
+
 
         fun createWidgetPanel(key: String, value: String): JPanel {
             val panel = JPanel()
@@ -79,19 +139,53 @@ class ViewEditor {
                 removeLastWidget()
             }
             panel.add(removeButton)
-
             return panel
+        }
+        fun createWidgetBoolean(key: String, value: String): JPanel {
+            val panel = JPanel()
+            panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
+            panel.alignmentX = Component.LEFT_ALIGNMENT
+            panel.alignmentY = Component.TOP_ALIGNMENT
 
+            panel.add(JLabel(key))
+            val text = JRadioButton(value)
+            text.addFocusListener(object : FocusAdapter() {
+                override fun focusLost(e: FocusEvent) {
+                    val newValue = text.text
+                    if (firstObject.containsKey(key)) {
+                        firstObject[key] = newValue
+                        updatePreview()
+                    }
+                }
+            })
+            panel.add(text)
+            val removeButton = JButton("Remove")
+            removeButton.addActionListener {
+                removeLastWidget()
+            }
+            panel.add(removeButton)
+            return panel
         }
 
-        fun addWidget(key: String, value: String) {
+        fun addWidget(key: String, value: String? = null, values: MutableList<String>? = null) {
             if (firstObject.containsKey(key)) {
                 JOptionPane.showMessageDialog(this, "A key with the name '$key' already exists.", "Key Already Exists", JOptionPane.WARNING_MESSAGE)
                 return
             }
 
-            firstObject[key] = value
-            val panel = createWidgetPanel(key, value)
+            firstObject[key] = value!!
+            var panel: JPanel? = null
+            if(value=="true"){
+                panel = createWidgetBoolean(key, value)
+            }
+            else if(values!=null){
+                panel = createWidgetArray(key, values)
+
+            }
+            else if(value!=null){
+                panel = createWidgetPanel(key, value!!)
+            }
+
             left.add(panel)
             left.revalidate()
             left.repaint()
@@ -100,12 +194,14 @@ class ViewEditor {
 
         // Menu de contexto
         val menu = JPopupMenu()
+        val menuRadio = JRadioButton()
 
         val addJsonObjectItem = JMenuItem("Add JsonObject")
         addJsonObjectItem.addActionListener {
             val key = JOptionPane.showInputDialog(this, "Enter element key:") as? String
+            val value = JOptionPane.showInputDialog(this, "Enter value:")
             if (key != null) {
-                addWidget(key, JsonObject(mutableMapOf(key.toString() to JsonString("N/A"))).toJsonString())
+                addWidget(key, JsonObject(mutableMapOf(key.toString() to JsonString(value))).toJsonString())
             }
         }
         menu.add(addJsonObjectItem)
@@ -114,15 +210,28 @@ class ViewEditor {
         addJsonArrayItem.addActionListener {
             val key = JOptionPane.showInputDialog(this, "Enter element key:") as? String
             if (key != null) {
-                addWidget(key, JsonArray(mutableListOf(JsonString("N/A"))).toJsonString())
+                val values = mutableListOf<String>()
+                while (true) {
+                    val value = JOptionPane.showInputDialog(this, "Enter value (or click Cancel to exit):")
+                    if (value != null) {
+                        values.add(value)
+                    } else {
+                        break
+                    }
+                }
+                if (values != null) {
+                    addWidget(key, "",values)
+                }
             }
         }
+
         menu.add(addJsonArrayItem)
         val addJsonNumber = JMenuItem("Add JsonNumber")
         addJsonNumber.addActionListener {
             val key = JOptionPane.showInputDialog(this, "Enter element key:") as? String
+            val value = JOptionPane.showInputDialog(this, "Enter Number:")
             if (key != null) {
-                addWidget(key, JsonNumber(0).toJsonString())
+                addWidget(key, value)
             }
         }
         menu.add(addJsonNumber)
@@ -139,8 +248,9 @@ class ViewEditor {
         val addJsonStringItem = JMenuItem("Add JsonString")
         addJsonStringItem.addActionListener {
             val key = JOptionPane.showInputDialog(this, "Enter element key:") as? String
+            val value = JOptionPane.showInputDialog(this, "Enter value:")
             if (key != null) {
-                addWidget(key, JsonString("N/A").toJsonString())
+                addWidget(key, value)
             }
         }
         menu.add(addJsonStringItem)
